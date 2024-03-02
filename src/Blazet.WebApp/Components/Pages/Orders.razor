@@ -1,0 +1,24 @@
+﻿@page "/orders"
+@using Blazet.Application.Orders.DTOs
+
+<PageTitle>Orders</PageTitle>
+
+<h1>Hello, world!</h1>
+
+@Model.InternalNumber
+@Model.Quantity
+@Model.Price
+
+Welcome to your new app.
+
+@code {
+    private OrderDto Model = new() { InternalNumber = "1", Price = 10, Quantity = 3 };
+
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+}
