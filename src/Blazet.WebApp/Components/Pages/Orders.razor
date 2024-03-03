@@ -3,16 +3,35 @@
 
 <PageTitle>Orders</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Zamówienia</h1>
 
-@Model.InternalNumber
-@Model.Quantity
-@Model.Price
-
-Welcome to your new app.
+<MudCard>
+    <MudDataGrid T="OrderDto" Items="Elements" Dense="true" Bordered="true" Outlined="true"
+        ReadOnly="false" EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell">
+    <Columns>
+        <PropertyColumn Property="x=>x.InternalNumber" Title="Numer zamówienia" IsEditable=false />
+            <PropertyColumn Property="x=>x.Price" Title="Cena" Context="ctx">
+                <FooterTemplate>
+                    <MudText>@ctx.Items.Sum(x => x.Price)</MudText>
+                </FooterTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x=>x.Quantity" Title="Ilość" Context="ctx" >
+             <FooterTemplate>
+                 <MudText>@ctx.Items.Sum(x => x.Quantity)</MudText>
+               </FooterTemplate>
+            </PropertyColumn>
+    </Columns>
+    </MudDataGrid>
+</MudCard>
 
 @code {
     private OrderDto Model = new() { InternalNumber = "1", Price = 10, Quantity = 3 };
+    private List<OrderDto> Elements = new() {
+        new(){ InternalNumber = "1", Price = 10, Quantity = 3 },
+        new(){InternalNumber = "2", Price = 12, Quantity = 32 },
+        new(){InternalNumber = "3", Price = 14, Quantity = 33 },
+        new(){InternalNumber = "4", Price = 16, Quantity = 34 },
+        };
 
     private int currentCount = 0;
 
