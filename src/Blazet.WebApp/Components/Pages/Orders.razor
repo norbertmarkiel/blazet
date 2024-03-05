@@ -1,6 +1,7 @@
-﻿@page "/orders"
-@using Blazet.Application.Orders.DTOs
+﻿@using Blazet.Application.Orders.DTOs
+@using Blazet.WebApp.Core.Constants
 @rendermode InteractiveServer
+@attribute [Route(PageRoutes.OrderList)]
 <PageTitle>Zamówienia</PageTitle>
 
 <h1>Zamówienia</h1>
@@ -20,8 +21,23 @@
                  <MudText>@ctx.Items.Sum(x => x.Quantity)</MudText>
                </FooterTemplate>
             </PropertyColumn>
+            <TemplateColumn IsEditable="false" Title="Actions">
+                <CellTemplate Context="ctx">
+                    <MudButtonGroup>
+                        <MudButton OnClick='()=> Delete(ctx.Item)'><MudIcon Style="font-size: 1rem;" Icon="@Icons.Material.Filled.Delete" Title="Delete" /></MudButton>
+                    </MudButtonGroup>
+                </CellTemplate>
+            </TemplateColumn>
     </Columns>
     </MudDataGrid>
+
+    <MudButtonGroup>
+        <MudButton OnClick="AddOrder">Add</MudButton>
+        <MudButton>Edit</MudButton>
+        <MudButton>Delete</MudButton>
+    </MudButtonGroup>
+
+
 </MudCard>
 
 @code {
@@ -33,6 +49,14 @@
         new(){InternalNumber = "4", Price = 16, Quantity = 34 },
         };
 
+    public void AddOrder()
+    {
+        Elements.Add(new OrderDto { InternalNumber = (Elements.Count() + 1).ToString(), Price = 0, Quantity = 1 });    
+    }
+    public void Delete(OrderDto orderDto)
+    {
+        Elements.Remove(orderDto);
+    }
     private int currentCount = 0;
 
     private void IncrementCount()
