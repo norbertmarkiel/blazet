@@ -1,6 +1,6 @@
 ﻿namespace Blazet.Domain.Orders.Entities
 {
-    internal class Order
+    public class Order
     {
         public Order(string internalNumber, int quantity, decimal price)
         {
