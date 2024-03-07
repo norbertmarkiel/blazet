@@ -21,7 +21,8 @@ namespace Blazet.Infrastructure.Persistence
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while initialising the database");
+                throw new Exception();
+                //_logger.LogError(ex, "An error occurred while initialising the database");
                 throw;
             }
         }

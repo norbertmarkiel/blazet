@@ -14,6 +14,7 @@ namespace Blazet.Infrastructure;
                 IConfiguration configuration)
         {
 
+        services.AddDatabase(configuration);
 
 
 
