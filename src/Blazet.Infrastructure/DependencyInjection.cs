@@ -14,14 +14,21 @@ namespace Blazet.Infrastructure;
                 IConfiguration configuration)
         {
 
-        services.AddDatabase(configuration);
+        services
+            .AddSettings(configuration)
+            .AddDatabase(configuration);
 
 
 
             return services;
         }
-
-
+    private static IServiceCollection AddSettings(this IServiceCollection services,
+    IConfiguration configuration)
+    {
+        services.Configure<DatabaseSettings>(configuration.GetSection(DatabaseSettings.Key))
+            .AddSingleton(s => s.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+        return services;
+    }
     private static IServiceCollection AddDatabase(this IServiceCollection services,
       IConfiguration configuration)
     {
@@ -40,6 +47,8 @@ namespace Blazet.Infrastructure;
             services.AddDbContext<AppDbContext>((p, m) =>
             {
                 var databaseSettings = p.GetRequiredService<IOptions<DatabaseSettings>>().Value;
+
+
                 m.AddInterceptors(p.GetServices<ISaveChangesInterceptor>());
                 m.UseDatabase(databaseSettings.DBProvider, databaseSettings.ConnectionString);
             });

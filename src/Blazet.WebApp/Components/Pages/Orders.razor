@@ -1,7 +1,13 @@
-﻿@using Blazet.Application.Orders.DTOs
+﻿@using Blazet.Application.Orders.Commands
+@using Blazet.Application.Orders.DTOs
+@using Blazet.Application.Orders.Queries
 @using Blazet.WebApp.Core.Constants
+@using MediatR
 @rendermode InteractiveServer
 @attribute [Route(PageRoutes.OrderList)]
+@inject IMediator _mediator
+
+
 <PageTitle>Zamówienia</PageTitle>
 
 <h1>Zamówienia</h1>
@@ -37,6 +43,7 @@
         <MudButton>Delete</MudButton>
     </MudButtonGroup>
 
+    <MudButton OnClick='()=> ReloadServer()'><MudIcon Style="font-size: 1rem;" Icon="@Icons.Material.Filled.SaveAlt" Title="reload" /></MudButton>
 
 </MudCard>
 
@@ -49,19 +56,49 @@
         new(){InternalNumber = "4", Price = 16, Quantity = 34 },
         };
 
-    public void AddOrder()
+    public async Task AddOrder()
     {
-        Elements.Add(new OrderDto { InternalNumber = (Elements.Count() + 1).ToString(), Price = 0, Quantity = 1 });    
+        Elements.Add(new OrderDto { InternalNumber = (Elements.Count() + 1).ToString(), Price = 0, Quantity = 1 });
+        var command = new AddOrderCommand(0, 1);
+        await _mediator.Send(command);
     }
     public void Delete(OrderDto orderDto)
     {
         Elements.Remove(orderDto);
     }
     private int currentCount = 0;
+    private bool _loading;
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        await ReloadServer();
+
+    }
+
+    private async Task ReloadServer()
+    {
+        try
+        {
+
+            _loading = true;
+
+            var query = new OrderDtoItemListQuery();
+
+            var result = await _mediator.Send(query);
+            Elements = result;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+        finally
+        {
+
+            _loading = false;
+        }
+
+    
     }
 
 }

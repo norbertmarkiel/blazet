@@ -8,7 +8,7 @@ namespace Blazet.WebApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +34,8 @@ namespace Blazet.WebApp
                 using (var scope = app.Services.CreateScope())
                 {
                     var initializer = scope.ServiceProvider.GetRequiredService<AppDbSeeder>();
-                    //await initializer.InitialiseAsync();
-                    //await initializer.SeedAsync();
+                    await initializer.InitialiseAsync();
+                    await initializer.SeedAsync();
                 }
             }
 
