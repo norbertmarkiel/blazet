@@ -1,6 +1,7 @@
 ﻿@using Blazet.Application.Orders.Commands
 @using Blazet.Application.Orders.DTOs
 @using Blazet.Application.Orders.Queries
+@using Blazet.WebApp.Components.Pages.Orders.Components
 @using Blazet.WebApp.Core.Constants
 @using MediatR
 @rendermode InteractiveServer
@@ -14,7 +15,8 @@
 
 <MudCard>
     <MudDataGrid T="OrderDto" Items="Elements" Dense="true" Bordered="true" Outlined="true"
-        ReadOnly="false" EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell">
+        ReadOnly="false" EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
+                 CommittedItemChanges="@CommittedItemChanges">
     <Columns>
         <PropertyColumn Property="x=>x.InternalNumber" Title="Numer zamówienia" IsEditable=false />
             <PropertyColumn Property="x=>x.Price" Title="Cena" Context="ctx">
@@ -30,7 +32,7 @@
             <TemplateColumn IsEditable="false" Title="Actions">
                 <CellTemplate Context="ctx">
                     <MudButtonGroup>
-                        <MudButton OnClick='()=> Delete(ctx.Item)'><MudIcon Style="font-size: 1rem;" Icon="@Icons.Material.Filled.Delete" Title="Delete" /></MudButton>
+                        <MudButton OnClick='()=> DeleteOrder(ctx.Item)'><MudIcon Style="font-size: 1rem;" Icon="@Icons.Material.Filled.Delete" Title="Delete" /></MudButton>
                     </MudButtonGroup>
                 </CellTemplate>
             </TemplateColumn>
@@ -39,8 +41,6 @@
 
     <MudButtonGroup>
         <MudButton OnClick="AddOrder">Add</MudButton>
-        <MudButton>Edit</MudButton>
-        <MudButton>Delete</MudButton>
     </MudButtonGroup>
 
     <MudButton OnClick='()=> ReloadServer()'><MudIcon Style="font-size: 1rem;" Icon="@Icons.Material.Filled.SaveAlt" Title="reload" /></MudButton>
@@ -58,13 +58,30 @@
 
     public async Task AddOrder()
     {
-        Elements.Add(new OrderDto { InternalNumber = (Elements.Count() + 1).ToString(), Price = 0, Quantity = 1 });
-        var command = new AddOrderCommand(0, 1);
+
+        var parameters = new DialogParameters<AddOrderComponent>
+        {
+
+        };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<AddOrderComponent>("Add order", parameters, options);
+
+        await ReloadServer();
+
+    }
+
+    public async Task CommittedItemChanges(OrderDto item)
+    {
+        var command = new UpdateOrderCommand(item.Id, item.Price, item.Quantity);
         await _mediator.Send(command);
     }
-    public void Delete(OrderDto orderDto)
+
+    public async Task DeleteOrder(OrderDto orderDto)
     {
-        Elements.Remove(orderDto);
+
+        var command = new DeleteOrderCommand(orderDto.Id);
+        await _mediator.Send(command);
+        await ReloadServer();
     }
     private int currentCount = 0;
     private bool _loading;

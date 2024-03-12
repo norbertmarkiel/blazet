@@ -14,9 +14,9 @@
         public string InternalNumber { get; private set; }
         public int Quantity { get; private set; }
         public decimal Price { get; private set; }
-        public void Update(string internalNumber, decimal price)
+        public void Update(int quantity, decimal price)
         {
-            InternalNumber = internalNumber;
+            Quantity = quantity;
             Price = price;
         }
     }

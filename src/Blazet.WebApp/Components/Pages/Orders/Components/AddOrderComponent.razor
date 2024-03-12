@@ -1,0 +1,59 @@
+﻿@using Blazet.Application.Common.Models
+@using Blazet.Application.Orders.Commands
+@using Blazet.Application.Orders.DTOs
+@using Blazet.Infrastructure.Constants
+@using MediatR
+
+@inject IMediator _mediator
+@inherits MudComponentBase
+
+<h3>AddOrderComponent</h3>
+<MudDialog>
+    <DialogContent>
+        <MudNumericField @bind-Value="Model.Price" Label="Cena" />
+        <MudNumericField @bind-Value="Model.Quantity" Label="Ilość" />
+    </DialogContent>
+        <DialogActions>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+        <MudButton Loading="@_saving" OnClick="Submit">@ConstantString.Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
+    private bool _saving;
+    private MudForm? _form;
+
+    public OrderDto Model { get; set; } = new();
+
+
+
+    private async Task Submit()
+    {
+        try
+        {
+            _saving = true;
+            // await _form!.Validate().ConfigureAwait(false);
+
+            // if (!_form!.IsValid)
+            //     return;
+
+            var command = new AddOrderCommand(Model.Price, Model.Quantity);
+
+            var result = await _mediator.Send(command);
+
+            if (result.Succeeded)
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}
