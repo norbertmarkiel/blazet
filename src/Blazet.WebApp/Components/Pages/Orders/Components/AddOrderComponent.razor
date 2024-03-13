@@ -33,11 +33,6 @@
         try
         {
             _saving = true;
-            // await _form!.Validate().ConfigureAwait(false);
-
-            // if (!_form!.IsValid)
-            //     return;
-
             var command = new AddOrderCommand(Model.Price, Model.Quantity);
 
             var result = await _mediator.Send(command);
