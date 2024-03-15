@@ -1,5 +1,9 @@
 ﻿using Blazet.Application.Common.Interfaces;
+using Blazet.Application.Orders.DTOs;
+using Blazet.Domain.Customers.Entities;
+using Blazet.Domain.Orders.Entities;
 using Blazet.Domain.Orders.Exceptions;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +13,15 @@ namespace Blazet.Application.Orders.Commands
     public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand>
     {
         private readonly IAppDbContext _appDbContext;
+        private readonly IValidator<Order> _validator;
 
-        public UpdateOrderCommandHandler(IAppDbContext appDbContext)
+
+        public UpdateOrderCommandHandler(IAppDbContext appDbContext,
+            IValidator<Order> validator
+        )
         {
             _appDbContext = appDbContext;
+            _validator = validator;
         }
 
         public async Task Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
@@ -23,6 +32,14 @@ namespace Blazet.Application.Orders.Commands
                 throw new OrderNotFoundException();
             }
             order.Update(request.Quantity, request.Price);
+
+            var validationResult = await _validator.ValidateAsync(order);
+            if (!validationResult.IsValid)
+            {
+                var errorMessages = string.Join(",", validationResult.Errors);
+                throw new OrderInvalidDataException(errorMessages);
+            }
+
             _appDbContext.Orders.Update(order);
             await _appDbContext.SaveChangesAsync(cancellationToken);
         }
