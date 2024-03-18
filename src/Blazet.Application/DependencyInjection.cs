@@ -1,5 +1,5 @@
-﻿using Blazet.Application.Orders.DTOs;
-using Blazet.Application.Orders.Validators;
+﻿using Blazet.Application.Orders.Validators;
+using Blazet.Application.Pipeline;
 using Blazet.Domain.Orders.Entities;
 using FluentValidation;
 using MediatR.Pipeline;
@@ -16,8 +16,8 @@ namespace Blazet.Application
             {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 config.AddOpenBehavior(typeof(RequestExceptionProcessorBehavior<,>));
+                config.AddOpenBehavior(typeof(UnhandledExceptionBehaviour<,>));
             });
-
             services.AddValidators();
 
             return services;

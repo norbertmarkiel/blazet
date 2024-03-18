@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Blazet.Infrastructure.Persistence;
 using Blazet.Infrastructure.Configuration;
 using Blazet.Application.Common.Interfaces;
+using Blazet.Infrastructure.Services;
 
 namespace Blazet.Infrastructure;
     public static class DependencyInjection
@@ -16,11 +17,11 @@ namespace Blazet.Infrastructure;
 
         services
             .AddSettings(configuration)
-            .AddDatabase(configuration);
+        .AddDatabase(configuration);
 
 
 
-            return services;
+            return services.AddScoped<ICurrentUserService, CurrentUserService>();
         }
     private static IServiceCollection AddSettings(this IServiceCollection services,
     IConfiguration configuration)

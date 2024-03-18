@@ -1,5 +1,6 @@
 ﻿@page "/counter"
 @rendermode InteractiveServer
+@inject IDialogService _dialogService 
 
 <PageTitle>Counter</PageTitle>
 
@@ -12,8 +13,14 @@
 @code {
     private int currentCount = 0;
 
-    private void IncrementCount()
+    private async Task IncrementCount()
     {
         currentCount++;
+        if (currentCount > 5)
+        {
+
+            await _dialogService.ShowMessageBox("Error","Current count is too big");
+            throw new InvalidOperationException("Current count is too big!");
+        }
     }
 }
