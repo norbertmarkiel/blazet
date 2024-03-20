@@ -1,4 +1,5 @@
-﻿using MudBlazor.Services;
+﻿using MudBlazor;
+using MudBlazor.Services;
 
 namespace Blazet.WebApp
 {
@@ -8,7 +9,6 @@ namespace Blazet.WebApp
         {
             services.AddMudServices();
             return services;
-
         }
     }
 }

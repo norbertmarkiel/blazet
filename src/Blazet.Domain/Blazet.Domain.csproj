@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Exception\" />
     <Folder Include="Orders\DomainEvents\" />
     <Folder Include="Orders\Services\" />
     <Folder Include="Orders\Repositories\" />

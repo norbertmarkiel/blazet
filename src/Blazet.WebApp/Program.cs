@@ -3,6 +3,7 @@ using Blazet.Infrastructure;
 using Blazet.Infrastructure.Persistence;
 using Blazet.Server;
 using Blazet.WebApp.Components;
+using MudBlazor;
 
 namespace Blazet.WebApp
 {

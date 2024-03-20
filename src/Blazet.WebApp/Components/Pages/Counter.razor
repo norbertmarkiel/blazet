@@ -12,15 +12,23 @@
 
 @code {
     private int currentCount = 0;
-
+    [CascadingParameter]
+    public Error? Error { get; set; }
     private async Task IncrementCount()
     {
-        currentCount++;
-        if (currentCount > 5)
+        try
         {
+            if (currentCount > 5)
+            {
+                throw new InvalidOperationException("Current count is over five!");
+            }
+            currentCount++;
 
-            await _dialogService.ShowMessageBox("Error","Current count is too big");
-            throw new InvalidOperationException("Current count is too big!");
+
+        }
+        catch (Exception ex)
+        {
+            await Error?.ProcessError(ex);
         }
     }
 }

@@ -7,22 +7,20 @@
 @rendermode InteractiveServer
 @attribute [Route(PageRoutes.OrderList)]
 @inject IMediator _mediator
-
-<PageTitle>Zamówienia</PageTitle>
-<h1>Zamówienia</h1>
-
+<PageTitle>Orders</PageTitle>
+<h1>Orders</h1>
 <MudCard>
     <MudDataGrid T="OrderDto" Items="Elements" Dense="true" Bordered="true" Outlined="true"
                  ReadOnly="false" EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
-                 CommittedItemChanges="@CommittedItemChanges">
+                 CommittedItemChanges="@CommittedItemChanges" RowClick="@RowClicked">
         <Columns>
-            <PropertyColumn Property="x => x.InternalNumber" Title="Numer zamówienia" IsEditable=false/>
-            <PropertyColumn Property="x => x.Price" Title="Cena" Context="ctx">
+            <PropertyColumn Property="x => x.InternalNumber" Title="Internal Number" IsEditable=false/>
+            <PropertyColumn Property="x => x.Price" Title="Price" Context="ctx">
                 <FooterTemplate>
                     <MudText>@ctx.Items.Sum(x => x.Price)</MudText>
                 </FooterTemplate>
             </PropertyColumn>
-            <PropertyColumn Property="x => x.Quantity" Title="Ilość" Context="ctx">
+            <PropertyColumn Property="x => x.Quantity" Title="Quantity" Context="ctx">
                 <FooterTemplate>
                     <MudText>@ctx.Items.Sum(x => x.Quantity)</MudText>
                 </FooterTemplate>
@@ -44,31 +42,56 @@
 
 @code {
     private List<OrderDto> Elements = new();
+    [CascadingParameter]
+    public Error? Error { get; set; }
+
+    private OrderDto TmpItem { get; set; } = new();
+
     public async Task AddOrder()
     {
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = DialogService.Show<AddOrderComponent>("Add order", options);
-        await ReloadServer();
+        try
+        {
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+            var dialog = DialogService.Show<AddOrderComponent>("Add order", options);
+            await ReloadServer();
+        }
+        catch (Exception ex)
+        {
+            await Error.ProcessError(ex);
+        }
     }
-
+    public async Task StartedEditingItem(OrderDto item)
+    {
+        TmpItem.Price = item.Price;
+        TmpItem.Quantity = item.Quantity;
+    }
     public async Task CommittedItemChanges(OrderDto item)
     {
-        var command = new UpdateOrderCommand(item.Id, item.Price, item.Quantity);
-        await _mediator.Send(command);
+        try
+        {
+            var command = new UpdateOrderCommand(item.Id, item.Price, item.Quantity);
+            await _mediator.Send(command);
+        }
+        catch (Exception e)
+        {
+            await Error.ProcessError(e);
+
+            item.Price = TmpItem.Price;
+            item.Quantity = TmpItem.Quantity;
+        }
     }
 
     public async Task DeleteOrder(OrderDto orderDto)
     {
-
         var command = new DeleteOrderCommand(orderDto.Id);
         await _mediator.Send(command);
-        await ReloadServer();
     }
     private int currentCount = 0;
     private bool _loading;
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(1);//Workaround for proper display dialogService in Error.ProcessError
         await ReloadServer();
     }
 
@@ -83,11 +106,16 @@
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+            await Error.ProcessError(ex);
         }
         finally
         {
             _loading = false;
-        }
+        }        
+    }
+    void RowClicked(DataGridRowClickEventArgs<OrderDto> args)
+    {
+        TmpItem.Price = args.Item.Price;
+        TmpItem.Quantity = args.Item.Quantity;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Blazet.Application.Common.Exceptions
 {
-    public class InternalServerException : Exception
+    public class ServerException : Exception
     {
-        public InternalServerException(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+        public ServerException(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
             : base(message)
         {
             ErrorMessages = new[] { message };

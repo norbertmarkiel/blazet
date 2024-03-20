@@ -45,7 +45,7 @@
     {
         switch (Exception)
         {
-            case InternalServerException e:
+            case ServerException e:
                 StatusCode = e.StatusCode.ToString();
                 if (e.ErrorMessages is not null)
                 {

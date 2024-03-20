@@ -7,7 +7,6 @@ namespace Blazet.Application.Orders.Queries
 {
     public record OrderDtoItemListQuery : IRequest<List<OrderDto>>;
 
-
     public class OrderDtoItemListDtoQueryHandler : IRequestHandler<OrderDtoItemListQuery, List<OrderDto>>
     {
         private readonly IAppDbContext _appDbContext;

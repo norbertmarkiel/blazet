@@ -39,13 +39,13 @@ namespace Blazet.Server.Middlewares
         }
         private static (int statusCode, string title) MapExceptionWithStatusCode(Exception exception)
         {
-            if (exception is not InternalServerException && exception.InnerException != null)
+            if (exception is not ServerException && exception.InnerException != null)
                 while (exception.InnerException != null)
                     exception = exception.InnerException;
             return exception switch
             {
                 ArgumentOutOfRangeException => (StatusCodes.Status400BadRequest, exception.Message),
-                InternalServerException => (StatusCodes.Status500InternalServerError, exception.Message),
+                ServerException => (StatusCodes.Status500InternalServerError, exception.Message),
                 KeyNotFoundException => (StatusCodes.Status404NotFound, exception.Message),
                 _ => (StatusCodes.Status500InternalServerError, "An error occured. Contact your system administrator.")
             };
