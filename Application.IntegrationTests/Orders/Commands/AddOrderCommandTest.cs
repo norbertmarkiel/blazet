@@ -17,14 +17,12 @@ namespace Application.IntegrationTests.Orders.Commands
             await SendAsync(command);
         }
 
-
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
             using var scope = _scopeFactory.CreateScope();
             var mediator = scope.ServiceProvider.GetService<IMediator>();
             return await mediator.Send(request);
         }
-
 
         public static async Task SendAsync(IRequest request)
         {
