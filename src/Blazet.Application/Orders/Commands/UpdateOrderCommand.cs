@@ -1,6 +1,4 @@
 ﻿using Blazet.Application.Common.Interfaces;
-using Blazet.Application.Orders.DTOs;
-using Blazet.Domain.Customers.Entities;
 using Blazet.Domain.Orders.Entities;
 using Blazet.Domain.Orders.Exceptions;
 using FluentValidation;
