@@ -13,7 +13,6 @@ namespace Blazet.Application.Orders.Commands
         private readonly IAppDbContext _appDbContext;
         private readonly IValidator<Order> _validator;
 
-
         public UpdateOrderCommandHandler(IAppDbContext appDbContext,
             IValidator<Order> validator
         )
@@ -21,7 +20,6 @@ namespace Blazet.Application.Orders.Commands
             _appDbContext = appDbContext;
             _validator = validator;
         }
-
         public async Task Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _appDbContext.Orders.FirstOrDefaultAsync(x => x.Id.Equals(request.Id));
