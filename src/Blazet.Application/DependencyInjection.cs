@@ -22,12 +22,10 @@ namespace Blazet.Application
 
             return services;
         }
-
         public static IServiceCollection AddValidators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<Order>, OrderValidator>();
             return services;
         }
-
     }
 }
