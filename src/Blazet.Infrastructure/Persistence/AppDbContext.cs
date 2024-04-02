@@ -15,7 +15,6 @@ namespace Blazet.Infrastructure.Persistence
 
         public DbSet<Order> Orders { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -28,7 +27,5 @@ namespace Blazet.Infrastructure.Persistence
             {
             }
         }
-
-
     }
 }
