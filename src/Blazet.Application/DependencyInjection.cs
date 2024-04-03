@@ -19,7 +19,6 @@ namespace Blazet.Application
                 config.AddOpenBehavior(typeof(UnhandledExceptionBehaviour<,>));
             });
             services.AddValidators();
-
             return services;
         }
         public static IServiceCollection AddValidators(this IServiceCollection services)
