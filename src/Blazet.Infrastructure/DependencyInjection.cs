@@ -33,8 +33,6 @@ public static class DependencyInjection
             .AddSettings(configuration)
         .AddDatabase(configuration);
 
-
-
         return services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
     private static IServiceCollection AddSettings(this IServiceCollection services,
