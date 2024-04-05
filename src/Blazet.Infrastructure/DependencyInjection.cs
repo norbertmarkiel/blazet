@@ -162,7 +162,6 @@ public static class DependencyInjection
                 service.Initialize();
                 return service;
             });
-
         return services;
     }
 }
