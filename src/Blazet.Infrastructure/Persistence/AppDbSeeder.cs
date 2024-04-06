@@ -6,7 +6,6 @@ namespace Blazet.Infrastructure.Persistence
     public class AppDbSeeder
     {
         private readonly AppDbContext _context;
-
         public AppDbSeeder(AppDbContext context)
         {
             _context = context;
