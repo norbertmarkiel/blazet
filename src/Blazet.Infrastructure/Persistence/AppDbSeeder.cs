@@ -38,7 +38,6 @@ namespace Blazet.Infrastructure.Persistence
             }
         }
 
-
         private async Task TrySeedAsync()
         {
             if (!_context.Orders.Any())
