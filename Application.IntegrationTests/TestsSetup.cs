@@ -47,7 +47,6 @@ namespace Application.IntegrationTests
         }
         public static async Task ResetState()
         {
-            await Console.Out.WriteLineAsync();
             var tmp = _configuration;
             await _checkpoint.ResetAsync(_configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
         }

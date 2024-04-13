@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.IntegrationTests.Orders.Commands
 {
-    public class AddOrderCommandTest
+    public class AddOrderCommandTest : TestBase
     {
 
         private static IServiceScopeFactory _scopeFactory;
