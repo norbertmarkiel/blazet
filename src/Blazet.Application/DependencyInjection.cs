@@ -12,6 +12,7 @@ namespace Blazet.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

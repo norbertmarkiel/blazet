@@ -1,34 +1,19 @@
 ﻿using Blazet.Application.Orders.Commands;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+using FluentAssertions;
+using FluentValidation;
 
 namespace Application.IntegrationTests.Orders.Commands
 {
+    using static TestsSetup;
+
     public class AddOrderCommandTest : TestBase
     {
-
-        private static IServiceScopeFactory _scopeFactory;
-
         [Test]
-        public async Task AddOrder()
+        public void AddOrder_ThrowValidationError()
         {
-            var command = new AddOrderCommand(12, 1);
-
-            await SendAsync(command);
-        }
-
-        public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
-        {
-            using var scope = _scopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetService<IMediator>();
-            return await mediator.Send(request);
-        }
-
-        public static async Task SendAsync(IRequest request)
-        {
-            using var scope = _scopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetService<IMediator>();
-            await mediator.Send(request);
+            var command = new AddOrderCommand(-1, 2);
+             FluentActions.Invoking(() =>
+                SendAsync(command)).Should().ThrowAsync<ValidationException>();
         }
     }
 }

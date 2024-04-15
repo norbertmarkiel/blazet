@@ -19,7 +19,7 @@ namespace Blazet.Infrastructure.Persistence
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                throw new Exception(ex.Message);
                 //_logger.LogError(ex, "An error occurred while initialising the database");
                 throw;
             }
