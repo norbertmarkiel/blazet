@@ -2,7 +2,6 @@
 using Blazet.Application.Common.Models;
 using Blazet.Domain.Orders.Entities;
 using MediatR;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Blazet.Application.Orders.Commands
 {
