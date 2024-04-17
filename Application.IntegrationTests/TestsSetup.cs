@@ -1,6 +1,10 @@
 ﻿using Blazet.Application;
+using Blazet.Application.Common.Interfaces;
+using Blazet.Application.Orders.Commands;
 using Blazet.Infrastructure;
 using Blazet.Infrastructure.Persistence;
+using FluentAssertions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +42,9 @@ namespace Application.IntegrationTests
 
             services.AddInfrastructure(_configuration)
                 .AddApplication();
+
+            services.AddLogging();
+
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
             _checkpoint = await Respawner.CreateAsync(_configuration.GetValue<string>("DatabaseSettings:ConnectionString"),
                 new RespawnerOptions
@@ -71,8 +78,8 @@ namespace Application.IntegrationTests
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
             using var scope = _scopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetService<IMediator>();
-            var x = mediator.Send(request);
+            var mediator = scope.ServiceProvider.GetService<ISender>();
+            var _appDbContext = scope.ServiceProvider.GetService<IAppDbContext>();
             return await mediator.Send(request);
         }
 

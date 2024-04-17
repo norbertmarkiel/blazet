@@ -1,6 +1,8 @@
 ﻿using Blazet.Application.Common.Interfaces;
 using Blazet.Application.Common.Models;
+using Blazet.Application.Orders.Validators;
 using Blazet.Domain.Orders.Entities;
+using FluentValidation;
 using MediatR;
 
 namespace Blazet.Application.Orders.Commands
@@ -17,9 +19,10 @@ namespace Blazet.Application.Orders.Commands
 
         public async Task<Result<Guid>> Handle(AddOrderCommand request, CancellationToken cancellationToken)
         {
+
             var order = new Order("404", request.Quantity, request.Price);
 
-        _appDbContext.Orders.Add(order);
+            _appDbContext.Orders.Add(order);
             await _appDbContext.SaveChangesAsync(cancellationToken);
         
             return await Result<Guid>.SuccessAsync(order.Id);

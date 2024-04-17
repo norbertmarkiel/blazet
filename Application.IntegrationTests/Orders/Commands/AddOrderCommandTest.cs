@@ -11,9 +11,9 @@ namespace Application.IntegrationTests.Orders.Commands
         [Test]
         public void AddOrder_ThrowValidationError()
         {
-            var command = new AddOrderCommand(-1, 2);
-             FluentActions.Invoking(() =>
-                SendAsync(command)).Should().ThrowAsync<ValidationException>();
+            var command = new AddOrderCommand(-11, -2);
+             FluentActions.Invoking( () =>
+                 SendAsync(command)).Should().ThrowAsync<ValidationException>();
         }
     }
 }

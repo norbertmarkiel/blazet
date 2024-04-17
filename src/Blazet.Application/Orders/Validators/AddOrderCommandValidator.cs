@@ -1,11 +1,11 @@
-﻿using Blazet.Domain.Orders.Entities;
+﻿using Blazet.Application.Orders.Commands;
 using FluentValidation;
 
 namespace Blazet.Application.Orders.Validators
 {
-    public class OrderValidator : AbstractValidator<Order>
+    public class AddOrderCommandValidator : AbstractValidator<AddOrderCommand>
     {
-        public OrderValidator()
+        public AddOrderCommandValidator()
         {
             RuleFor(x => x.Price)
                 .NotEmpty().WithMessage("Field is required")
