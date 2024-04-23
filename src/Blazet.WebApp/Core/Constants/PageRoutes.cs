@@ -4,7 +4,6 @@
     {
         public const string OrderList = "orders";
 
-
         public const string Login = "/login";
         public const string Logout = "/logout";
 
