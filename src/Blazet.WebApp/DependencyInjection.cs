@@ -7,7 +7,9 @@ namespace Blazet.WebApp
     {
         public static IServiceCollection AddWebApp(this IServiceCollection services, IConfiguration config)
         {
-            services.AddMudServices();
+            services.AddMudServices()
+            .AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>()
+                ;
             return services;
         }
     }
