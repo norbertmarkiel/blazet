@@ -14,7 +14,6 @@
     </PackageReference>
     <PackageReference Include="MudBlazor" Version="6.16.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Blazet.Server\Blazet.Server.csproj" />
   </ItemGroup>
