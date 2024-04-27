@@ -7,5 +7,7 @@
         public static string Update = "Update";
         public static string Refresh = "Refresh";
         public static string Loading = "Loading";
+        public static string Login = "Login";
+
     }
 }

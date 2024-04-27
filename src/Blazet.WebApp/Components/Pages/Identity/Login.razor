@@ -1,10 +1,73 @@
-﻿@attribute [Route(PageRoutes.Login)]
+﻿@using System.ComponentModel.DataAnnotations
+@using Blazet.Infrastructure.Constants
+@using Blazet.WebApp.Components.Pages.Identity.Models
+@using MudBlazor
+@attribute [Route(PageRoutes.Login)]
+<PageTitle>Login Page</PageTitle>
 
-
-<h3>Login</h3>
-<h4>Not Implemented Yet</h4>
-
-
+<EditForm Model="Model" @ref="editForm" OnValidSubmit="Submit">
+    <DataAnnotationsValidator /> @*TODO Change into FluentValidation *@
+<MudGrid>
+    <MudItem xs="4" />
+    <MudItem xs="4">
+        <MudCard>
+                <MudCardContent>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
+                    </MudItem>
+                    <MudText>
+                        Don't have an account? <MudLink Href="@PageRoutes.Register" Target="_self"> Sign Up</MudLink>
+                    </MudText>
+                    <MudTextField Style="max-width:80%" @bind-Value="Model.UserName" For="() => Model.UserName" Label="User Name" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                    <MudTextField Style="max-width:80%" @bind-Value="Model.Password" For="() => Model.Password" Label="Password" Variant="Variant.Outlined" Margin="Margin.Dense"
+                    InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" 
+                    OnAdornmentClick="ButtonTestClick" AdornmentAriaLabel="Show Password"  />
+                    <MudCheckBox @bind-Value="Model.RememberMe"> Remember me</MudCheckBox>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" ButtonType="ButtonType.Submit">@ConstantString.Login</MudButton>
+                </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="4" />
+</MudGrid>
+</EditForm>
 @code {
+    EditForm editForm;
+    bool _saving;
+    bool isShow;
+    LoginModel Model;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    InputType PasswordInput = InputType.Password;
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Model is null)
+            Model = new();
+        editForm = new() { EditContext = new(Model) };
+        return base.OnInitializedAsync();
+    }
+    void Submit()
+    {
+         //NIY
+    }
+    void ButtonTestClick()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+
 
 }
