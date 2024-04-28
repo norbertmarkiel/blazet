@@ -4,7 +4,6 @@
 @using MudBlazor
 @attribute [Route(PageRoutes.Login)]
 <PageTitle>Login Page</PageTitle>
-
 <EditForm Model="Model" @ref="editForm" OnValidSubmit="Submit">
     <DataAnnotationsValidator /> @*TODO Change into FluentValidation *@
 <MudGrid>
