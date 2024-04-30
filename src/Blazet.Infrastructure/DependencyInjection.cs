@@ -21,7 +21,6 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
-
 namespace Blazet.Infrastructure;
 public static class DependencyInjection
 {
