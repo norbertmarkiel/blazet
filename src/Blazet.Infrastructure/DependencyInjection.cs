@@ -86,7 +86,6 @@ public static class DependencyInjection
         {
             var identitySettings = configuration.GetRequiredSection(IdentitySettings.Key).Get<IdentitySettings>();
 
-
             // Password settings
             options.Password.RequireDigit = identitySettings!.RequireDigit;
             options.Password.RequiredLength = identitySettings.RequiredLength;
