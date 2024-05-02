@@ -2,8 +2,6 @@ using Blazet.Application;
 using Blazet.Infrastructure;
 using Blazet.Infrastructure.Persistence;
 using Blazet.Server;
-using Blazet.WebApp.Components;
-using MudBlazor;
 
 namespace Blazet.WebApp
 {
@@ -42,9 +40,8 @@ namespace Blazet.WebApp
             }
 
             app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
             app.UseAntiforgery();
+            app.UseStaticFiles();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
